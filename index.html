@@ -3,42 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>Trang web bảo mật</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f3; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .box { background: white; padding: 40px 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px; transition: all 0.3s ease; }
-        h2 { color: #333; margin-bottom: 20px; font-size: 22px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; outline: none; text-align: center; }
-        input:focus { border-color: #007bff; box-shadow: 0 0 5px rgba(0,123,255,0.2); }
-        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        button:hover { background: #0056b3; }
-        #error { color: #dc3545; font-size: 14px; margin-top: 10px; min-height: 20px; }
-        
-        /* Giao diện bức thư ẩn */
-        #content { display: none; width: 100%; max-width: 600px; margin: 20px; animation: fadeIn 1s ease-in-out; }
-        .letter { background: #f4ecd8; border: 2px solid #c3a37a; border-radius: 8px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); position: relative; }
-        .letter::before { content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 1px dashed #d9c5b2; pointer-events: none; }
-        .letter-title { font-family: 'Georgia', serif; font-size: 24px; color: #5c4033; margin-bottom: 25px; text-align: center; font-weight: bold; border-bottom: 2px dashed #c3a37a; padding-bottom: 10px; }
-        .letter-text { font-family: 'Georgia', serif; font-size: 18px; color: #4a3525; line-height: 1.8; text-align: justify; text-indent: 30px; font-style: italic; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        body { font-family: sans-serif; background: #eef2f3; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .box { background: white; padding: 40px 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; text-align: center; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        #content { display: none; width: 100%; max-width: 600px; margin: 20px; }
+        .letter { background: #f4ecd8; border: 2px solid #c3a37a; border-radius: 8px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .letter-title { font-size: 24px; color: #5c4033; margin-bottom: 25px; text-align: center; font-weight: bold; border-bottom: 2px dashed #c3a37a; padding-bottom: 10px; }
+        .letter-text { font-size: 18px; color: #4a3525; line-height: 1.8; text-align: justify; font-style: italic; }
     </style>
 </head>
 <body>
 
     <!-- Màn hình khóa -->
     <div class="box" id="lock-screen">
-        <h2>🗺 Hãy nhập đáp án</h2>
-        <input type="password" id="password" placeholder="Nhập tọa độ truy cập...">
-        <button onclick="checkPassword()">Xác Thực</button>
-        <p id="error"></p>
+        <h2>🔒 Nhập mật khẩu để vào</h2>
+        <input type="text" id="password" placeholder="Mật khẩu là D7...">
+        <button onclick="check()">Xác Thực</button>
+        <p id="error" style="color:red; margin-top:10px;"></p>
     </div>
 
-    <!-- Nội dung ẩn hiện ra khi đúng mật khẩu -->
+    <!-- Nội dung ẩn -->
     <div id="content">
         <div class="letter">
             <div class="letter-title">📜 THƯ GỬI HẢI TẶC</div>
@@ -49,40 +38,18 @@
     </div>
 
     <script>
-        // Hàm băm bảo mật SHA-256 chống F12 xem trộm
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        async function checkPassword() {
-            // Lấy dữ liệu và tự động viết hoa + xóa khoảng trắng thừa
-            const inputRaw = document.getElementById("password").value;
-            const inputCleaned = inputRaw.trim().toUpperCase(); 
-            const errorElement = document.getElementById("error");
+        function check() {
+            var v = document.getElementById("password").value;
+            // Ép chữ thường thành chữ hoa và xóa khoảng trắng
+            var pass = v.trim().toUpperCase(); 
             
-            // Mã hóa chuỗi người dùng nhập
-            const hashedInput = await sha256(inputCleaned);
-
-            // Mã hóa SHA-256 cố định của mật khẩu "D7"
-            const correctHash = "b25863c52e6462723c348f95c56b62ec54f49495f87b8fbe15e1bc978d302a90";
-
-            if (hashedInput === correctHash) {
+            if (pass === "D7") {
                 document.getElementById("lock-screen").style.display = "none";
                 document.getElementById("content").style.display = "block";
             } else {
-                errorElement.innerText = "❌ Mật khẩu không chính xác. Vui lòng thử lại!";
+                document.getElementById("error").innerText = "Sai mật khẩu rồi!";
             }
         }
-
-        // Bấn Enter để gửi nhanh
-        document.getElementById("password").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                checkPassword();
-            }
-        });
     </script>
 </body>
 </html>
