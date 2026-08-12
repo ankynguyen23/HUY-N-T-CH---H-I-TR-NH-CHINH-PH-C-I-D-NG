@@ -9,7 +9,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            /* ĐƯỜNG DẪN ẢNH NỀN: Tự động nhận file ảnh tên banner.png bạn vừa up lên GitHub cùng thư mục */
+            /* Nhận file ảnh tên banner.png bạn đã up lên GitHub cùng thư mục */
             background: url('banner.png') no-repeat center center fixed; 
             background-size: cover; 
             display: flex; 
@@ -46,10 +46,11 @@
 </head>
 <body>
 
-    <!-- Màn hình khóa với hình nền Hải Tặc -->
+    <!-- Màn hình khóa bí ẩn -->
     <div class="box" id="lock-screen">
-        <h2>🏴‍☠️ HỒI KẾT</h2>
-        <input type="text" id="password" placeholder="Nhập tọa độ để về đích...">
+        <h2>🏴‍☠️ KHỞI HÀNH</h2>
+        <!-- Đã sửa placeholder bí ẩn và đổi thành type="password" để ẩn ký tự gõ -->
+        <input type="password" id="password" placeholder="Nhập mật hiệu để căng buồm...">
         <button onclick="check()">Xác Thực</button>
         <p id="error" style="color:#ff4a4a; margin-top:12px; font-weight: bold;"></p>
     </div>
@@ -69,13 +70,13 @@
             var v = document.getElementById("password").value;
             var pass = v.trim().toUpperCase(); 
             
+            // Mật khẩu kích hoạt vẫn giữ nguyên là D7 hoặc d7
             if (pass === "D7") {
                 document.getElementById("lock-screen").style.display = "none";
                 document.getElementById("content").style.display = "block";
-                // Xóa ảnh nền hải tặc sau khi vào để đọc thư dễ hơn trên nền tối mượt
                 document.body.style.background = "#0d1127"; 
             } else {
-                document.getElementById("error").innerText = "❌ Tọa độ không chính xác!";
+                document.getElementById("error").innerText = "❌ Mật hiệu sai! Bạn sẽ bị chìm tàu!";
             }
         }
         
