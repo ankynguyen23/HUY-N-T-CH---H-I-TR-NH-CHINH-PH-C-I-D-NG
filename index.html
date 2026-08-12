@@ -1,0 +1,39 @@
+html<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang web bảo mật</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; background: #f4f4f4; }
+        .box { background: white; padding: 30px; display: inline-block; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input, button { padding: 10px; margin: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="box" id="lock-screen">
+        <h2>Nhập mật khẩu để xem nội dung</h2>
+        <input type="password" id="password" placeholder="Mật khẩu...">
+        <button onclick="checkPassword()">Vào trang</button>
+        <p id="error" style="color:red;"></p>
+    </div>
+
+    <div id="content" style="display:none; padding: 20px;">
+        <!-- NỘI DUNG ẨN CỦA BẠN Ở ĐÂY -->
+        <h1>Chào mừng bạn đã vào trang web!</h1>
+        <p>Đây là nội dung bí mật được bảo vệ bằng mật khẩu.</p>
+    </div>
+
+    <script>
+        function checkPassword() {
+            var pass = document.getElementById("password").value;
+            // Thay "123456" bằng mật khẩu bạn muốn đặt
+            if (pass === "123456") { 
+                document.getElementById("lock-screen").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            } else {
+                document.getElementById("error").innerText = "Sai mật khẩu rồi!";
+            }
+        }
+    </script>
+</body>
+</html>
