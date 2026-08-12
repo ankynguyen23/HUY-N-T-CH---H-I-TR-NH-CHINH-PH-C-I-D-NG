@@ -48,9 +48,9 @@
 
     <!-- Màn hình khóa bí ẩn -->
     <div class="box" id="lock-screen">
-        <h2>🏴‍☠️ KHỞI HÀNH</h2>
+        <h2>🏴‍☠️ HỒI KẾT CỦA ĐẠI HẢI TRÌNH</h2>
         <!-- Đã sửa placeholder bí ẩn và đổi thành type="password" để ẩn ký tự gõ -->
-        <input type="password" id="password" placeholder="Nhập mật hiệu để căng buồm...">
+        <input type="password" id="password" placeholder="Nhập tọa độ chính xác...">
         <button onclick="check()">Xác Thực</button>
         <p id="error" style="color:#ff4a4a; margin-top:12px; font-weight: bold;"></p>
     </div>
@@ -76,7 +76,7 @@
                 document.getElementById("content").style.display = "block";
                 document.body.style.background = "#0d1127"; 
             } else {
-                document.getElementById("error").innerText = "❌ Mật hiệu sai! Bạn sẽ bị chìm tàu!";
+                document.getElementById("error").innerText = "❌ Tọa độ không chính xác!";
             }
         }
         
