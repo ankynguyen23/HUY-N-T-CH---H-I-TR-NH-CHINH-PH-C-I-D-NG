@@ -33,8 +33,10 @@
         h2 { color: #00c3ff; margin-bottom: 20px; font-size: 24px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-shadow: 0 0 10px rgba(0, 195, 255, 0.5); }
         input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #00c3ff; background: rgba(255,255,255,0.1); color: #fff; border-radius: 8px; font-size: 16px; text-align: center; outline: none; }
         input::placeholder { color: #aaa; }
+        input:disabled { background: rgba(255,255,255,0.05); border-color: #555; color: #888; cursor: not-allowed; }
         button { width: 100%; padding: 12px; background: #00c3ff; color: #0d1127; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
         button:hover { background: #0088cc; box-shadow: 0 0 15px #00c3ff; }
+        button:disabled { background: #555; color: #888; cursor: not-allowed; box-shadow: none; }
         
         /* Giao diện bức thư ẩn phong cách hải tặc cổ điển */
         #content { display: none; width: 100%; max-width: 600px; margin: 20px; }
@@ -48,17 +50,17 @@
 
     <!-- Màn hình khóa bí ẩn -->
     <div class="box" id="lock-screen">
-        <h2>🏴‍☠️ HỒI KẾT CỦA ĐẠI HẢI TRÌNH</h2>
+        <h2>🏴‍☠️ HỒI KẾT CỦA ĐẠI HẢI TRÌNH 🏴‍☠️</h2>
         <!-- Đã sửa placeholder bí ẩn và đổi thành type="password" để ẩn ký tự gõ -->
-        <input type="password" id="password" placeholder="Nhập tọa độ chính xác...">
-        <button onclick="check()">Xác Thực</button>
+        <input type="password" id="password" placeholder=" Hãy nhập tọa độ chính xác...">
+        <button id="submit-btn" onclick="check()">Xác Thực</button>
         <p id="error" style="color:#ff4a4a; margin-top:12px; font-weight: bold;"></p>
     </div>
 
     <!-- Bức thư ẩn bên trong -->
     <div id="content">
         <div class="letter">
-            <div class="letter-title">📜 THƯ GỬI HẢI TẶC</div>
+            <div class="letter-title">📜 THƯ GỬI HẢI TẶC 📜</div>
             <p class="letter-text">
                 Xin chào các bạn, những hải tặc thích phiêu lưu. Tuy đã giải được bí mật mà ta để lại nhưng mọi thứ vẫn chưa thật sự kết thúc!
             </p>
@@ -66,22 +68,38 @@
     </div>
 
     <script>
+        var attempts = 0;
+        var maxAttempts = 5;
+
         function check() {
-            var v = document.getElementById("password").value;
+            if (attempts >= maxAttempts) return;
+
+            var inputElem = document.getElementById("password");
+            var btnElem = document.getElementById("submit-btn");
+            var v = inputElem.value;
             var pass = v.trim().toUpperCase(); 
             
-            // Mật khẩu kích hoạt vẫn giữ nguyên là D7 hoặc d7
-            if (pass === "D7") {
+            // Mật khẩu kích hoạt vẫn giữ nguyên là N7 hoặc n7
+            if (pass === "N7") {
                 document.getElementById("lock-screen").style.display = "none";
                 document.getElementById("content").style.display = "block";
                 document.body.style.background = "#0d1127"; 
             } else {
-                document.getElementById("error").innerText = "❌ Tọa độ không chính xác!";
+                attempts++;
+                var remaining = maxAttempts - attempts;
+
+                if (attempts >= maxAttempts) {
+                    document.getElementById("error").innerText = "🔒 Bạn đã nhập sai 5 lần! Quyền truy cập đã bị khóa.";
+                    inputElem.disabled = true;
+                    btnElem.disabled = true;
+                } else {
+                    document.getElementById("error").innerText = "❌ Tọa độ không chính xác! (Còn " + remaining + " lần thử)";
+                }
             }
         }
         
         document.getElementById("password").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") { check(); }
+            if (event.key === "Enter" && attempts < maxAttempts) { check(); }
         });
     </script>
 </body>
